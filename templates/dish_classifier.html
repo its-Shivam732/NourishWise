@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dish Image Classifier</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">FoodML</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/diet-planner">Diet Planner</a>
+            <a href="/quality-classifier">Quality Classifier</a>
+        </div>
+    </div>
+
+    <section class="upload-section">
+        <h1>Upload Dish Image</h1>
+        <form id="image-form" enctype="multipart/form-data">
+            <input type="file" id="dish-image" name="dish-image" accept="image/*" required>
+            <button type="submit">Classify Dish</button>
+        </form>
+        <div id="results"></div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 FoodML Project</p>
+    </footer>
+
+    <script>
+        document.getElementById('image-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/api/classify-dish', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json())
+              .then(data => {
+                  const resultsDiv = document.getElementById('results');
+                  resultsDiv.innerHTML = `
+                      <h3>Dish: ${data.dish_name}</h3>
+                      <p>Ingredients: ${data.ingredients}</p>
+                      <p>Nutrition Info: ${data.nutrition}</p>
+                  `;
+              })
+              .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

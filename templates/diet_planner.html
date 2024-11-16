@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diet Planner</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">FoodML</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/dish-classifier">Dish Image Classifier</a>
+            <a href="/quality-classifier">Quality Classifier</a>
+        </div>
+    </div>
+
+    <section class="form-section">
+        <h1>Create Your Profile</h1>
+        <form id="diet-form">
+            <div class="form-group">
+                <label for="height">Height (cm):</label>
+                <input type="number" id="height" name="height" required>
+            </div>
+            <div class="form-group">
+                <label for="weight">Weight (kg):</label>
+                <input type="number" id="weight" name="weight" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="diet-preference">Diet Preference:</label>
+                <select id="diet-preference" name="diet-preference" required>
+                    <option value="veg">Vegetarian</option>
+                    <option value="nonveg">Non-Vegetarian</option>
+                </select>
+            </div>
+            <button type="submit">Get Recommendations</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 FoodML Project</p>
+    </footer>
+
+    <script>
+        document.getElementById('diet-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/api/recommend-diet', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json())
+              .then(data => {
+                  // Display diet recommendations or handle error
+                  alert("Recommendations: " + data.recommendations);
+              })
+              .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

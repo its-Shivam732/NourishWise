@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quality Classifier</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">FoodML</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/diet-planner">Diet Planner</a>
+            <a href="/dish-classifier">Dish Image Classifier</a>
+        </div>
+    </div>
+
+    <section class="upload-section">
+        <h1>Upload Fruit/Vegetable Image</h1>
+        <form id="quality-form" enctype="multipart/form-data">
+            <input type="file" id="quality-image" name="quality-image" accept="image/*" required>
+            <button type="submit">Check Quality</button>
+        </form>
+        <div id="quality-result"></div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 FoodML Project</p>
+    </footer>
+
+    <script>
+        document.getElementById('quality-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            fetch('/api/classify-quality', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json())
+              .then(data => {
+                  const qualityResultDiv = document.getElementById('quality-result');
+                  qualityResultDiv.innerHTML = `
+                      <h3>Quality: ${data.quality}</h3>
+                  `;
+              })
+              .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
